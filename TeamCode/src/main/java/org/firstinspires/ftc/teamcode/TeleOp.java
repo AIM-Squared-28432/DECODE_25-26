@@ -17,10 +17,17 @@ public class TeleOp extends OpMode {
         db.drive(gamepad1);
         ot.loop(gamepad1);
         if (gamepad1.y) {
-            if (ot.isSpinning == true) {
-                ot.isSpinning = false;
+            if (ot.ismotorSpinning == true) {
+                ot.ismotorSpinning = false;
             }  else {
-                ot.isSpinning = true;
+                ot.ismotorSpinning = true;
+            }
+        }
+        if(gamepad1.a){
+            if(ot.isServoSpinning == true){
+                ot.isServoSpinning = false;
+            } else {
+                ot.isServoSpinning= true;
             }
         }
     }

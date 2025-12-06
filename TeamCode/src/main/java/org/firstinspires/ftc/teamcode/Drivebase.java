@@ -29,8 +29,9 @@ public class Drivebase {
         double backRightPower;
 
         double y = -gamepad1.left_stick_y;
-        double x = gamepad1.left_stick_x;
-        double rx = gamepad1.right_stick_x;
+        double rx = gamepad1.left_stick_x;
+        double x = gamepad1.right_stick_x;
+        //switched rx and x
 
         double denominator = Math.max(1,Math.abs(y) + Math.abs(x) + Math.abs(rx));
         frontRightPower = (y - x - rx)/denominator;
