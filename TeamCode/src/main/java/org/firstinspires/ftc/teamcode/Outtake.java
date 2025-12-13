@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 
@@ -13,35 +14,33 @@ public class Outtake {
     private DcMotor launch;
     private CRServo guide;
     private CRServo push;
-    public boolean ismotorSpinning;
-    public boolean isServoSpinning;
+    public boolean motorSpining;
+    public boolean servoSpinning;
+    public ElapsedTime shootTime = new ElapsedTime();
 
-public void init(HardwareMap hwMap) {
-    launch = hwMap.get(DcMotor.class, "launch");
-    guide = hwMap.get(CRServo.class, "guide");
-    push = hwMap.get(CRServo.class, "push");
-    launch.setDirection(DcMotorSimple.Direction.REVERSE);
-    guide.setDirection(DcMotorSimple.Direction.REVERSE);
-    ismotorSpinning = false;
-    isServoSpinning = false;
-    launch.setPower(0);
-}
-public void loop(Gamepad gamepad1){
+    public void init(HardwareMap hwMap) {
+        launch = hwMap.get(DcMotor.class, "launch");
+        guide = hwMap.get(CRServo.class, "guide");
+        push = hwMap.get(CRServo.class, "push");
+        launch.setDirection(DcMotorSimple.Direction.REVERSE);
+        guide.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorSpining = false;
+        servoSpinning = false;
+    }
 
-        if (ismotorSpinning == true) {
+    public void loop(Gamepad gamepad1) {
+        if (motorSpining == true) {
             launch.setPower(1.0);
-
-
         } else {
             launch.setPower(0);
         }
-        if(isServoSpinning == true){
+
+        if (servoSpinning == true) {
             guide.setPower(1.0);
             push.setPower(1.0);
         } else {
             guide.setPower(0);
             push.setPower(0);
         }
-
     }
 }

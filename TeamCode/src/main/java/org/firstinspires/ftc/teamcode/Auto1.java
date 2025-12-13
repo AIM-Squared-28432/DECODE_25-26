@@ -1,4 +1,3 @@
-/*
 package org.firstinspires.ftc.teamcode;
 
 
@@ -12,51 +11,20 @@ public class Auto1 extends OpMode {
     public Outtake ot = new Outtake();
     public Drivebase db = new Drivebase();
     public ElapsedTime et = new ElapsedTime();
-    public double MOVING_MS = 1000;
     public AutoState currentState;
 
     @Override
     public void init() {
-        et.reset();
         ot.init(hardwareMap);
         db.init(hardwareMap);
-        currentState  = AutoState.PARKING;
-    }
-    public void foward() {
-        db.frontRight.setPower(0.25);
-        db.frontLeft.setPower(0.25);
-        db.backRight.setPower(0.25);
-        db.backLeft.setPower(0.25);
+        et.reset();
+        currentState  = AutoState.STOP;
     }
     public void backwards() {
-        db.frontRight.setPower(-0.25);
-        db.frontLeft.setPower(-0.25);
-        db.backRight.setPower(-0.25);
-        db.backLeft.setPower(-0.25);
-    }
-    public void right() {
-        db.frontRight.setPower(-0.25);
-        db.frontLeft.setPower(0.25);
-        db.backRight.setPower(0.25);
-        db.backLeft.setPower(-0.25);
-    }
-    public void left() {
-        db.frontRight.setPower(0.25);
-        db.frontLeft.setPower(-0.25);
-        db.backRight.setPower(-0.25);
-        db.backLeft.setPower(0.25);
-    }
-    public void turnRight() {
-        db.frontRight.setPower(-0.25);
-        db.frontLeft.setPower(0.25);
-        db.backRight.setPower(-0.25);
-        db.backLeft.setPower(0.25);
-    }
-    public void turnLeft() {
-        db.frontRight.setPower(0.25);
-        db.frontLeft.setPower(-0.25);
-        db.backRight.setPower(0.25);
-        db.backLeft.setPower(-0.25);
+        db.frontRight.setPower(-1.0);
+        db.frontLeft.setPower(-1.0);
+        db.backRight.setPower(-1.0);
+        db.backLeft.setPower(-1.0);
     }
     public void stopRobot() {
         db.frontRight.setPower(0);
@@ -66,12 +34,10 @@ public class Auto1 extends OpMode {
     }
 
     public enum AutoState {
-        FOWARD,
-        BACWARDS,
-        RIGHT,
-        LEFT,
-        PARKING,
-        LAUNCHING;
+        BACkWARDS,
+        STOP,
+        LAUNCHING,
+        PARKING;
     }
 
 
@@ -82,31 +48,29 @@ public class Auto1 extends OpMode {
         db.drive(gamepad1);
 
         switch (currentState) {
-            case PARKING:
+            case STOP:
+                ot.motorSpining = false;
+                ot.servoSpinning = false;
+                if (et.milliseconds() > 1000) {
+                    ot.motorSpining = true;
+                    currentState = AutoState.BACkWARDS;
+                }
                 break;
-            case FOWARD:
-                foward();
-                break;
-            case BACWARDS:
+            case BACkWARDS:
                 backwards();
-                break;
-            case RIGHT:
-                right();
-                break;
-            case LEFT:
-                left();
+                if (et.milliseconds() > 3000) {
+                    currentState = AutoState.LAUNCHING;
+                }
                 break;
             case LAUNCHING:
-                ot.isSpinning = true;
+                if (ot.motorSpining == true) {
+                    ot.servoSpinning = true;
+                }
+                if (et.milliseconds() > 10000) {
+                    currentState = AutoState.STOP;
+                }
                 break;
         }
 
-        if (et.milliseconds() > 1000) {
-            currentState = AutoState.FOWARD;
-        } else if (et.milliseconds() > 3000) {
-            currentState  = AutoState.PARKING;
-        }
     }
 }
-
- */
