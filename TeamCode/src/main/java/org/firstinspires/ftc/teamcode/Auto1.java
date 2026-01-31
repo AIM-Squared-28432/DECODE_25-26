@@ -5,6 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+
 @Autonomous (name="auto")
 public class Auto1 extends OpMode {
 
@@ -12,19 +16,13 @@ public class Auto1 extends OpMode {
     public Drivebase db = new Drivebase();
     public ElapsedTime et = new ElapsedTime();
     public AutoState currentState;
+    public Pose2D position1 = new Pose2D(DistanceUnit.MM, 0, -1000, AngleUnit.DEGREES, 0);
 
     @Override
     public void init() {
         ot.init(hardwareMap);
         db.init(hardwareMap);
-        et.reset();
-        currentState  = AutoState.STOP;
-    }
-    public void backwards() {
-        db.frontRight.setPower(-1.0);
-        db.frontLeft.setPower(-1.0);
-        db.backRight.setPower(-1.0);
-        db.backLeft.setPower(-1.0);
+        currentState = AutoState.DRIVE;
     }
     public void stopRobot() {
         db.frontRight.setPower(0);
@@ -34,10 +32,9 @@ public class Auto1 extends OpMode {
     }
 
     public enum AutoState {
-        BACkWARDS,
+        DRIVE,
         STOP,
-        LAUNCHING,
-        PARKING;
+        LAUNCHING;
     }
 
 
@@ -45,30 +42,27 @@ public class Auto1 extends OpMode {
     @Override
     public void loop() {
         ot.loop(gamepad2);
-        db.drive(gamepad1);
 
         switch (currentState) {
-            case STOP:
-                ot.motorSpining = false;
-                ot.servoSpinning = false;
-                if (et.milliseconds() > 1000) {
-                    ot.motorSpining = true;
-                    currentState = AutoState.BACkWARDS;
-                }
-                break;
-            case BACkWARDS:
-                backwards();
-                if (et.milliseconds() > 3000) {
+            case DRIVE:
+                db.setTarget(position1);
+                db.driveToTarget();
+                if (db.moveFinished) {
                     currentState = AutoState.LAUNCHING;
                 }
                 break;
             case LAUNCHING:
-                if (ot.motorSpining == true) {
-                    ot.servoSpinning = true;
-                }
-                if (et.milliseconds() > 10000) {
+                ot.motorSpinning = true;
+                ot.servoSpinning = true;
+                et.reset();
+                if (et.milliseconds() == 5000) {
                     currentState = AutoState.STOP;
                 }
+                break;
+            case STOP:
+                stopRobot();
+                ot.motorSpinning = false;
+                ot.servoSpinning = false;
                 break;
         }
 

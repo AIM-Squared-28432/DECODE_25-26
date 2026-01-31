@@ -14,22 +14,21 @@ public class Outtake {
     private DcMotor launch;
     private CRServo guide;
     private CRServo push;
-    public boolean motorSpining;
+    public boolean motorSpinning;
     public boolean servoSpinning;
-    public ElapsedTime shootTime = new ElapsedTime();
 
     public void init(HardwareMap hwMap) {
         launch = hwMap.get(DcMotor.class, "launch");
         guide = hwMap.get(CRServo.class, "guide");
         push = hwMap.get(CRServo.class, "push");
         launch.setDirection(DcMotorSimple.Direction.REVERSE);
-        guide.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorSpining = false;
+        guide.setDirection(CRServo.Direction.REVERSE);
+        motorSpinning = false;
         servoSpinning = false;
     }
 
     public void loop(Gamepad gamepad1) {
-        if (motorSpining == true) {
+        if (motorSpinning == true) {
             launch.setPower(1.0);
         } else {
             launch.setPower(0);
