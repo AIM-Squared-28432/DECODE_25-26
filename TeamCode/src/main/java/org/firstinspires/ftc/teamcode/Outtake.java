@@ -21,8 +21,8 @@ public class Outtake {
         launch = hwMap.get(DcMotor.class, "launch");
         guide = hwMap.get(CRServo.class, "guide");
         push = hwMap.get(CRServo.class, "push");
+        push.setDirection(DcMotorSimple.Direction.REVERSE);
         launch.setDirection(DcMotorSimple.Direction.REVERSE);
-        guide.setDirection(CRServo.Direction.REVERSE);
         motorSpinning = false;
         servoSpinning = false;
     }

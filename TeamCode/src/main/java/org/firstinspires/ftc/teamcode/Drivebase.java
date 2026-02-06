@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import static com.sun.tools.doclint.Entity._int;
+import static com.sun.tools.doclint.Entity.macr;
 import static com.sun.tools.doclint.Entity.pi;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -28,10 +29,7 @@ public class Drivebase {
     public double xTPM = 2000/(48*Math.PI);
     public double yTPM = 2000/(32*Math.PI);
     // good odometry pod
-    public double xPosition;
-    public double yPosition;
     public YawPitchRollAngles orientation;
-    public double heading = orientation.getYaw(AngleUnit.DEGREES);
     public Pose2D target = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
     public double xError;
     public double yError;
@@ -71,11 +69,11 @@ public class Drivebase {
         double backLeftPower;
         double backRightPower;
 
-        double denominator = Math.max(1,Math.abs(y) + Math.abs(x) + Math.abs(rx));
-        frontRightPower = (y - x - rx)/denominator;
-        frontLeftPower = (y + x + rx)/denominator;
-        backRightPower = (y + x - rx)/denominator;
-        backLeftPower = (y - x + rx)/denominator;
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1.0);
+        frontRightPower = (y - x - rx)/denominator;   // correct
+        frontLeftPower = (y + x + rx)/denominator;    // incorrect
+        backRightPower = (y + x - rx)/denominator;    // incorrect
+        backLeftPower = (y - x + rx)/denominator;     // correct
 
         frontRight.setPower(frontRightPower);
         frontLeft.setPower(frontLeftPower);
@@ -89,6 +87,7 @@ public class Drivebase {
     }
 
     public void driveToTarget() {
+        double heading = orientation.getYaw(AngleUnit.DEGREES);
         double xError = target.getX(DistanceUnit.MM) - xEncoder.getCurrentPosition()/xTPM;
         double yError = target.getY(DistanceUnit.MM) - yEncoder.getCurrentPosition()/yTPM;
         double headingError = target.getHeading(AngleUnit.DEGREES) - heading;
@@ -99,6 +98,6 @@ public class Drivebase {
     }
 
     public boolean moveFinished () {
-        return xError < xyThreshold && yError < xyThreshold && headingError < headingThreshold;
+        return Math.abs(xError) < xyThreshold && Math.abs(yError) < xyThreshold && Math.abs(headingError) < headingThreshold;
     }
 }

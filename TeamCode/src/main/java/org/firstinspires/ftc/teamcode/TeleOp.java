@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp")
 public class TeleOp extends OpMode {
 
-    public Drivebase db = new Drivebase();
+    public drivebaseTest db = new drivebaseTest();
     public Outtake ot = new Outtake();
     public Intake it = new Intake();
 
