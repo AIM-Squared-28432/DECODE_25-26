@@ -9,17 +9,32 @@ public class Intake {
     public DcMotor motor;
     public boolean intakeSpinning;
 
+
     public void init(HardwareMap hwMap) {
         motor = hwMap.get(DcMotor.class, "motor");
         motor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeSpinning = false;
+
     }
+
 
     public void loop(Gamepad gamepad1) {
         if (intakeSpinning == true) {
-            motor.setPower(1.0);
-        } else {
-            motor.setPower(0.0);
+            spinIn();
+        } else if (intakeSpinning == false){
+            stopSpin();
         }
-        }
+    }
+
+    public void spinIn () {
+        motor.setPower(1);
+    }
+
+    public void spinOut(){
+        motor.setPower(-1);
+    }
+
+    public void stopSpin() {
+        motor.setPower(0);
+    }
 }

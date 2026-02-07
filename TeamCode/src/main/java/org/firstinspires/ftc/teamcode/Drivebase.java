@@ -48,12 +48,12 @@ public class Drivebase {
       backRight = hwMap.get(DcMotor.class, "backRight");
       backLeft = hwMap.get(DcMotor.class, "backLeft");
       frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-      backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-      frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-      xEncoder = hwMap.get(DcMotorEx.class, "backRight");
-      yEncoder = hwMap.get(DcMotorEx.class, "frontLeft");
-      xEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-      yEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+      backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
+
+        xEncoder = hwMap.get(DcMotorEx.class, "frontRight");
+      yEncoder = hwMap.get(DcMotorEx.class, "backLeft");
       imu = hwMap.get(IMU.class, "imu");
       IMU.Parameters perameters = new IMU.Parameters(new RevHubOrientationOnRobot
                       (RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
@@ -70,16 +70,21 @@ public class Drivebase {
         double backRightPower;
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1.0);
-        frontRightPower = (y - x - rx)/denominator;   // correct
-        frontLeftPower = (y + x + rx)/denominator;    // incorrect
-        backRightPower = (y + x - rx)/denominator;    // incorrect
-        backLeftPower = (y - x + rx)/denominator;     // correct
+        frontRightPower = (y - x - rx)/denominator;
+        frontLeftPower = (y + x + rx)/denominator;
+        backRightPower = (y + x - rx)/denominator;
+        backLeftPower = (y - x + rx)/denominator;
 
         frontRight.setPower(frontRightPower);
         frontLeft.setPower(frontLeftPower);
         backRight.setPower(backRightPower);
         backLeft.setPower(backLeftPower);
 
+    }
+
+    public void setAllModes(DcMotor.RunMode mode) {
+        frontLeft.setMode(mode);
+        backRight.setMode(mode);
     }
 
     public void setTarget (Pose2D target) {

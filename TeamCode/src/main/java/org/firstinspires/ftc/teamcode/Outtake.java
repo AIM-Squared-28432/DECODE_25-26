@@ -29,17 +29,40 @@ public class Outtake {
 
     public void loop(Gamepad gamepad1) {
         if (motorSpinning == true) {
-            launch.setPower(1.0);
+            outtake();
         } else {
-            launch.setPower(0);
+            outtakeStop();
         }
 
         if (servoSpinning == true) {
-            guide.setPower(1.0);
-            push.setPower(1.0);
+            servoIn();
         } else {
-            guide.setPower(0);
-            push.setPower(0);
+            servoStop();
         }
+
+    }
+    public void servoIn () {
+        guide.setPower(1.0);
+        push.setPower(1.0);
+    }
+    public void servoOut () {
+        guide.setPower(-1.0);
+        push.setPower(-1.0);
+    }
+
+    public void servoStop () {
+        guide.setPower(0);
+        push.setPower(0);
+    }
+
+    public void outtake () {
+        launch.setPower(1.0);
+    }
+    public void outtakeOut () {
+        launch.setPower(-1);
+    }
+
+    public void outtakeStop () {
+        launch.setPower(0);
     }
 }

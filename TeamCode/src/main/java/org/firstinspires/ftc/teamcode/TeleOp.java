@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp")
 public class TeleOp extends OpMode {
 
-    public drivebaseTest db = new drivebaseTest();
+    public Drivebase db = new Drivebase();
     public Outtake ot = new Outtake();
     public Intake it = new Intake();
 
@@ -44,13 +44,14 @@ public class TeleOp extends OpMode {
             }
         }
         if (gamepad1.x) {
-            if (it.intakeSpinning == true) {
-                it.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-                it.intakeSpinning = false;
-            } else {
-                it.motor.setDirection(DcMotorSimple.Direction.FORWARD);
-                it.intakeSpinning = true;
-            }
+            it.spinOut();
+            ot.servoOut();
+            ot.outtakeOut();
+        }
+        if (gamepad1.dpad_up || gamepad1.dpad_down || gamepad1.dpad_left || gamepad1.dpad_right) {
+            it.stopSpin();
+            ot.servoStop();
+            ot.outtakeStop();
         }
     }
 }

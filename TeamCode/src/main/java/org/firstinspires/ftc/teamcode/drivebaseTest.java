@@ -30,6 +30,7 @@ public class drivebaseTest {
         backRight = hwMap.get(DcMotor.class, "backRight");
         backLeft = hwMap.get(DcMotor.class, "backLeft");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void drive(double x, double y, double rx) {
